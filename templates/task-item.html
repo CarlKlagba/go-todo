@@ -1,0 +1,12 @@
+{{define "task-item"}}
+<li class="list-group-item bg-primary text-white">
+
+    <input hx-put="/complete-task/{{ .Id }}"
+           class="form-check-input green"
+           type="checkbox"
+           value=""
+           id="flexCheckDefault"
+           {{ if .Completed }} checked {{ end }}>
+    {{ .Task }}  -  due in {{ .DaysLeft }}days
+</li>
+{{end}}
