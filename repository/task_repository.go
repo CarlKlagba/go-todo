@@ -99,7 +99,8 @@ func (repo *TaskRepository) CompleteTask(id int) (Task, error) {
 
 func (repo *TaskRepository) FindTask(id int) (Task, error) {
 	var task Task
-	err := repo.db.QueryRow("SELECT * FROM tasks WHERE id = ?", id).Scan(&task.Id, &task.Task, &task.Priority, &task.Completed, &task.DueDate)
+	err := repo.db.QueryRow("SELECT * FROM tasks WHERE id = ?", id).Scan(
+		&task.Id, &task.Task, &task.Priority, &task.Completed, &task.DueDate)
 	if err != nil {
 		return Task{}, err
 	}

@@ -5,7 +5,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"io"
-	"log"
 	"net/http"
 	"sort"
 	"strconv"
@@ -62,7 +61,7 @@ func main() {
 	e.GET("/", home)
 	e.POST("/add-task", addTask)
 	e.PUT("/complete-task/:id", completeTask)
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
 
 func completeTask(c echo.Context) error {
@@ -74,7 +73,7 @@ func completeTask(c echo.Context) error {
 		return err
 	}
 
-	return c.Render(http.StatusOK, "task-item", newTask)
+	return c.Render(http.StatusOK, "task-item", from(newTask))
 }
 
 func home(c echo.Context) error {
@@ -83,8 +82,8 @@ func home(c echo.Context) error {
 		return tasks[i].Priority < tasks[j].Priority
 	})
 
-	var tasksMap = map[string][]Task{
-		"Tasks": tasks,
+	var tasksMap = map[string][]TaskDto{
+		"Tasks": fromList(tasks),
 	}
 
 	return c.Render(http.StatusOK, "index", tasksMap)
@@ -113,8 +112,33 @@ func addTask(c echo.Context) error {
 
 	task, _ := taskRepo.FindTask(id)
 
-	log.Println("task: ", task)
-	log.Println("days left: ", task.DaysLeft())
+	return c.Render(http.StatusOK, "task-item", from(task))
+}
 
-	return c.Render(http.StatusOK, "task-item", task)
+type TaskDto struct {
+	Id        int
+	Task      string
+	Priority  int
+	Completed bool
+	DueDate   time.Time
+	DaysLeft  int
+}
+
+func from(task Task) TaskDto {
+	return TaskDto{
+		Id:        task.Id,
+		Task:      task.Task,
+		Priority:  task.Priority,
+		Completed: task.Completed,
+		DueDate:   task.DueDate,
+		DaysLeft:  task.DaysLeft(),
+	}
+}
+
+func fromList(tasks []Task) []TaskDto {
+	var tasksDto []TaskDto
+	for _, task := range tasks {
+		tasksDto = append(tasksDto, from(task))
+	}
+	return tasksDto
 }
