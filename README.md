@@ -10,8 +10,13 @@ https://v0.dev/r/ighKwI6iTCD
 - [X] Define a priority for a task
 - [X] Mark a task as completed
 - [X] Define a due date for a task
-- [ ] Persist tasks in local storage
-- [ ] Create a Docker image
+- [X] Persist tasks in local storage
+- [X] Create a Docker image
 - [ ] send a notification when a task is due
 - [ ] delete a task
 - [ ] edit a task
+
+side quest:
+- [ ] Implement a CRON library to send notifications
+
+primus_sucks

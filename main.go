@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/CarlKlagba/go-todo/notification"
 	. "github.com/CarlKlagba/go-todo/repository"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -40,14 +41,9 @@ func newTemplate(templates *template.Template) echo.Renderer {
 func main() {
 	//InitDatabase
 	taskRepo = NewTaskRepository(InitDatabase())
-	/*var tasks = []Task{
-		{1, "Sort papers", 1, false, time.Date(2024, 5, 15, 14, 30, 45, 100, time.Local)},
-		{2, "Pay URSSAF", 3, false, time.Date(2024, 4, 15, 14, 30, 45, 100, time.Local)},
-		{3, "Cancel subscription", 2, false, time.Date(2024, 5, 3, 14, 30, 45, 100, time.Local)},
-	}
-	for _, task := range tasks {
-		taskRepo.AddTask(task)
-	}*/
+
+	//Run notification server
+	go notification.Run(taskRepo)
 
 	e := echo.New()
 	// Middleware
