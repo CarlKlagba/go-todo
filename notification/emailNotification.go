@@ -44,10 +44,14 @@ func SendNotification(tasks []repository.Task) {
 
 	smtpUrl := smtpHost + ":587"
 
+	log.Println(tasks)
+	log.Println("MailBody " + mailBody)
+	log.Println("message: " + string(message))
+
 	err := smtp.SendMail(smtpUrl, auth, from, to, message)
 
 	if err != nil {
-
+		log.Println("Error: " + err.Error())
 		log.Fatal(err)
 
 	}

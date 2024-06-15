@@ -8,14 +8,32 @@ import (
 
 func Run(repo TaskRepository) {
 	fmt.Println("Run notification server")
+
+	runCron(sendEmailNotification, repo)
+}
+
+func runCron(task func(TaskRepository), repo TaskRepository) {
 	for {
-		tasks, err := repo.GetTasks()
-		if err == nil {
-			fmt.Println("Sending notifications...")
-			tasksToNotify := filterTaskNotify(tasks)
+		now := time.Now()
+		isCron, err := IsTimeToCron(now, CronAny, 1, 1)
+		if err != nil {
+			fmt.Println("Error in cron", err)
+		}
+		if isCron {
+			task(repo)
+		}
+		time.Sleep(55 * time.Second)
+	}
+}
+
+func sendEmailNotification(repo TaskRepository) {
+	tasks, err := repo.GetTasks()
+	if err == nil {
+		fmt.Println("Sending notifications...")
+		tasksToNotify := filterTaskNotify(tasks)
+		if len(tasksToNotify) > 0 {
 			SendNotification(tasksToNotify)
 		}
-		time.Sleep(30 * time.Second)
 	}
 }
 
