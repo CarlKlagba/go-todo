@@ -106,3 +106,11 @@ func (repo *TaskRepository) FindTask(id int) (Task, error) {
 	}
 	return task, nil
 }
+
+func (repo *TaskRepository) DeleteTask(id int) error {
+	_, err := repo.db.Exec("DELETE FROM tasks WHERE id = ?", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

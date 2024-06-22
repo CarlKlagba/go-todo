@@ -1,5 +1,5 @@
 {{define "task-item"}}
-<li class="list-group-item bg-primary text-white">
+<li class="list-group-item bg-primary text-white" id="task-item-{{ .Id}}">
 
     <input hx-put="/complete-task/{{ .Id }}"
            class="form-check-input green"
@@ -8,5 +8,10 @@
            id="flexCheckDefault"
            {{ if .Completed }} checked {{ end }}>
     {{ .Task }}  -  due in {{ .DaysLeft }}days
+    <button hx-delete="/delete-task/{{ .Id }}"
+            hx-swap="outerHTML"
+            hx-target="#task-item-{{ .Id }}"
+            class="btn btn-danger btn-sm float-end">Delete
+    </button>
 </li>
 {{end}}

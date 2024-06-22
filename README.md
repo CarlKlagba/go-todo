@@ -12,11 +12,31 @@ https://v0.dev/r/ighKwI6iTCD
 - [X] Define a due date for a task
 - [X] Persist tasks in local storage
 - [X] Create a Docker image
-- [ ] send a notification when a task is due
-- [ ] delete a task
+- [X] send a notification when a task is due
+- [X] delete a task
 - [ ] edit a task
+- [ ] revisit cron design
 
 side quest:
 - [ ] Implement a CRON library to send notifications
 
 primus_sucks
+
+
+## How to deploy
+
+```batch
+docker build -t todo-app .
+
+docker tag todo-app europe-west1-docker.pkg.dev/grand-radio-333810/cloud-run-source-deploy/todo-app
+
+docker push europe-west1-docker.pkg.dev/grand-radio-333810/cloud-run-source-deploy/todo-app:latest
+
+
+gcloud beta run deploy todo-app \
+    --image europe-west1-docker.pkg.dev/grand-radio-333810/cloud-run-source-deploy/todo-app:latest \
+    --region europe-west1 --allow-unauthenticated --port 8080 \
+    --min-instances 1 \
+    --no-cpu-throttling  --project grand-radio-333810 --tag init
+
+```

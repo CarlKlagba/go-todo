@@ -57,7 +57,19 @@ func main() {
 	e.GET("/", home)
 	e.POST("/add-task", addTask)
 	e.PUT("/complete-task/:id", completeTask)
+	e.DELETE("/delete-task/:id", deleteTask)
 	e.Logger.Fatal(e.Start(":8080"))
+}
+
+func deleteTask(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := taskRepo.DeleteTask(id)
+	if err != nil {
+		return err
+	}
+
+	return c.HTML(http.StatusOK, "")
 }
 
 func completeTask(c echo.Context) error {
